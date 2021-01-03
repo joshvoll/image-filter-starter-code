@@ -1,5 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import fetch from 'node-fetch';
+import fs from 'fs';
+
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
 (async () => {
@@ -28,11 +31,35 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   //   the filtered image file [!!TIP res.sendFile(filteredpath); might be useful]
 
   /**************************************************************************** */
-
   //! END @TODO1
   
   // Root Endpoint
-  // Displays a simple message to the user
+  // Displays a simple message to the use
+  app.get("/filteredimage", async (req, res) => {
+    let { image_url } = req.query;
+    // check if URL is valid
+    try {
+      await fetch(image_url)
+    } catch (err) {
+      console.log(err)
+      return res
+        .status(400)
+        .send('Please check the URL or use a different one.')
+    }
+
+    // filter image and return URL
+    let localURL = await filterImageFromURL(image_url);
+    res.sendFile(localURL);
+
+    // delete the filtered URL.
+    res.on('finish', () => {
+      fs.unlink(localURL, (err) => {
+        if (err) throw err;
+        console.log(`${localURL} has been removed.`);
+      })
+    });
+  });
+
   app.get( "/", async ( req, res ) => {
     res.send("try GET /filteredimage?image_url={{}}")
   } );

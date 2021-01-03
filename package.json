@@ -2,8 +2,13 @@
   "name": "udacity-c2-image-filter",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./server.js",
+  "engines": {
+    "node": "10.20.1",
+    "npm": ">=6.0.0"
+  },
   "scripts": {
+    "start": "node ./server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf www/ || true",
     "build": "npm run clean && tsc && cp package.json www/package.json && mkdir www/tmp/ && cd www && zip -r Archive.zip . && cd ..",
@@ -28,7 +33,9 @@
     "typescript": "^3.5.3"
   },
   "dependencies": {
+    "@types/node-fetch": "^2.5.7",
     "express": "^4.17.1",
-    "jimp": "^0.6.4"
+    "jimp": "^0.6.4",
+    "node-fetch": "^2.6.1"
   }
 }
